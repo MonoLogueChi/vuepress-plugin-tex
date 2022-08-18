@@ -63,7 +63,6 @@ const katexBlock = (tex: string, options: OriginalKatexOptions): string => {
 };
 
 export const katex: PluginWithOptions<TexPluginsOptions> = (md, options) => {
-  console.log(options);
   if (options?.plugins?.includes("mhchem")) {
     require("katex/contrib/mhchem");
   }
