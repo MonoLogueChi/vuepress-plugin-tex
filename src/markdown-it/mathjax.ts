@@ -51,7 +51,9 @@ const renderMath = (
   const adaptor = liteAdaptor();
 
   RegisterHTMLHandler(adaptor);
+
   const mathDocument = MathJax.document(content, documentOptions);
+
   /* eslint-disable */
   const html = adaptor.outerHTML(
     mathDocument.convert(content, { display: displayMode })
@@ -68,16 +70,20 @@ export const mathjax: PluginWithOptions<TexPluginsOptions> = (md, op) => {
   const options = (op?.options || {}) as MathJaxOptions;
   const documentOptions = {
     InputJax: new TeX({
-      packages: AllPackages,
+      packages: options.tex?.packages?.includes("AllPackages")
+        ? AllPackages
+        : options.tex?.packages || AllPackages,
       ...options?.tex,
     }),
-    // OutputJax: new SVG({
-    //   fontCache: "none",
-    //   ...options?.svg,
-    // }),
-    OutputJax: new CHTML({
-      // ...options?.chtml,
-    }),
+    OutputJax:
+      options?.chtml ?? false
+        ? new CHTML({
+            ...options?.chtml,
+          })
+        : new SVG({
+            fontCache: "none",
+            ...options?.svg,
+          }),
   };
 
   md.use(tex, {

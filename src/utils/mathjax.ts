@@ -170,8 +170,11 @@ export interface MathjaxSVGOutputOptions {
   titleID?: number;
 }
 
+export interface MathjaxCHTMLOutputOptions {}
+
 // TODO: Add mathjax options
 export interface MathJaxOptions {
   tex?: MathJaxTexInputOptions;
   svg?: MathjaxSVGOutputOptions;
+  chtml: MathjaxCHTMLOutputOptions;
 }
