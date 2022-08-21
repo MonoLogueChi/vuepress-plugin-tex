@@ -1,0 +1,25 @@
+@import "katex/dist/katex.min.css";
+
+.katex {
+  font-size: 1.05em;
+}
+
+.katex-display {
+  overflow: auto hidden;
+  -webkit-overflow-scrolling: touch;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+}
+
+.katex-display .katex-html {
+  overflow: auto hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.katex-display .katex {
+  font-size: 1.21em;
+}
+
+.katex-error {
+  color: #f00;
+}

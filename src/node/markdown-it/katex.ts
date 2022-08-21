@@ -69,7 +69,7 @@ export const katex: PluginWithOptions<TexPluginsOptions> = (md, options) => {
 
   const katexOptions = {
     throwOnError: false,
-    ...(options!.options as OriginalKatexOptions),
+    ...(options?.options as OriginalKatexOptions),
   };
 
   md.use(tex, {

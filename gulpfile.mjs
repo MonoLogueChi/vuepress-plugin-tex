@@ -32,32 +32,16 @@ const tsc1 = () => {
   return tsProject
     .src()
     .pipe(tsProject())
-    .pipe(
-      rename((path) => {
-        if (path.extname === ".js") {
-          path.extname = ".mjs";
-        }
-      })
-    )
-    .pipe(dest(tempDir));
+    .pipe(dest(resolve(tempDir)));
 };
 
 const tsc2 = () => {
   const tsProject = ts.createProject("tsconfig.cjs.json");
-  return (
-    src(resolve(inputDir, "**/*.ts"))
-      .pipe(replace("export default", "module.exports ="))
-
-      .pipe(tsProject())
-      // .pipe(
-      //   rename((path) => {
-      //     if (path.extname === ".js") {
-      //       path.extname = ".cjs";
-      //     }
-      //   })
-      // )
-      .pipe(dest(tempDir))
-  );
+  return tsProject
+    .src()
+    .pipe(replace("export default", "module.exports ="))
+    .pipe(tsProject())
+    .pipe(dest(resolve(tempDir)));
 };
 
 const cpVue = () => src(resolve(inputDir, "**/*.vue")).pipe(dest(outputDir));
@@ -69,13 +53,8 @@ const cpPackageJson = () => {
       jsonEditor({
         // version: version,
         type: "commonjs",
-        main: "index.js",
-        module: "index.mjs",
-        exports: {
-          import: "./index.mjs",
-          require: "./index.js",
-        },
-        types: "./index.d.ts",
+        main: "node/index.js",
+        types: "./node/index.d.ts",
       })
     )
     .pipe(src("readme.md"))
@@ -95,8 +74,8 @@ const cpJs = () => src(resolve(inputDir, "**/*.js")).pipe(dest(outputDir));
 
 export const build = series(
   cleanTemp,
-  // tsc1,
   tsc2,
+  // tsc1,
   cleanOut,
   cpTempJs,
   cpVue,

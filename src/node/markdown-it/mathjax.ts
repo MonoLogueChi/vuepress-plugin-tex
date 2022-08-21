@@ -31,12 +31,16 @@ import { SVG } from "mathjax-full/js/output/svg";
 import { CHTML } from "mathjax-full/js/output/chtml";
 import { liteAdaptor } from "mathjax-full/js/adaptors/liteAdaptor";
 import { RegisterHTMLHandler } from "mathjax-full/js/handlers/html";
+import { AssistiveMmlHandler } from "mathjax-full/js/a11y/assistive-mml.js";
 import { AllPackages } from "mathjax-full/js/input/tex/AllPackages";
 import { tex } from "./tex";
 
 import type { PluginWithOptions } from "markdown-it";
 import type { MathJaxOptions } from "../utils/mathjax";
 import type { TexPluginsOptions } from "../index";
+
+import "mathjax-full/js/util/entities/all.js";
+import { LiteElement } from "mathjax-full/js/adaptors/lite/Element";
 
 interface DocumentOptions {
   InputJax: TeX<unknown, unknown, unknown>;
@@ -54,12 +58,13 @@ const renderMath = (
 
   const mathDocument = MathJax.document(content, documentOptions);
 
+  const mathMmlNode = mathDocument.convert(content, { display: displayMode });
+
   /* eslint-disable */
-  const html = adaptor.outerHTML(
-    mathDocument.convert(content, { display: displayMode })
-  );
+  const html = adaptor.outerHTML(mathMmlNode);
+
   const stylesheet = adaptor.outerHTML(
-    documentOptions.OutputJax.styleSheet(mathDocument) as any
+    documentOptions.OutputJax.styleSheet(mathDocument) as LiteElement
   );
 
   /* eslint-enable */
@@ -68,11 +73,12 @@ const renderMath = (
 
 export const mathjax: PluginWithOptions<TexPluginsOptions> = (md, op) => {
   const options = (op?.options || {}) as MathJaxOptions;
+  const packages = options?.tex?.packages || op?.plugins || AllPackages;
   const documentOptions = {
     InputJax: new TeX({
-      packages: options.tex?.packages?.includes("AllPackages")
+      packages: packages.includes("AllPackages")
         ? AllPackages
-        : options.tex?.packages || AllPackages,
+        : packages || AllPackages,
       ...options?.tex,
     }),
     OutputJax:

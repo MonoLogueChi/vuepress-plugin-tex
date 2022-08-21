@@ -170,11 +170,89 @@ export interface MathjaxSVGOutputOptions {
   titleID?: number;
 }
 
-export interface MathjaxCHTMLOutputOptions {}
+export interface MathjaxCHTMLOutputOptions {
+  /**
+   * global scaling factor for all expressions
+   *
+   * @default 1
+   */
+  scale?: number;
+
+  /**
+   * smallest scaling factor to use
+   *
+   * @default 0.5
+   */
+  minScale?: number;
+
+  /**
+   * Whether to make mtext elements use surrounding font
+   *
+   * @default false
+   */
+  mtextInheritFont?: boolean;
+
+  /**
+   * Whether to make merror text use surrounding font
+   *
+   * @default false
+   */
+  merrorInheritFont?: boolean;
+
+  /**
+   * true for MathML spacing rules, false for TeX rules
+   *
+   * @default false
+   */
+  mathmlSpacing?: boolean;
+
+  /**
+   * RFDa and other attributes NOT to copy to the output
+   */
+  skipAttributes: Record<string, boolean>;
+
+  /**
+   * default size of ex in em units
+   *
+   * @default 0.5
+   */
+  exFactor?: number;
+
+  /**
+   * @default "center"
+   */
+  displayAlign?: "left" | "center" | "right";
+
+  /**
+   * @default 0
+   */
+  displayIndent?: string;
+
+  /**
+   * true to match ex-height of surrounding font
+   *
+   * @default true
+   */
+  matchFontHeight?: boolean;
+
+  /**
+   * The URL where the fonts are found
+   *
+   * @default "[mathjax]/components/output/chtml/fonts/woff-v2"
+   */
+  fontURL?: string;
+
+  /**
+   * true means only produce CSS that is used in the processed equations
+   *
+   * @default true
+   */
+  adaptiveCSS?: boolean;
+}
 
 // TODO: Add mathjax options
 export interface MathJaxOptions {
   tex?: MathJaxTexInputOptions;
   svg?: MathjaxSVGOutputOptions;
-  chtml: MathjaxCHTMLOutputOptions;
+  chtml?: MathjaxCHTMLOutputOptions;
 }
